@@ -2,6 +2,7 @@ package hello.login.web;
 
 import hello.login.domain.member.Member;
 import hello.login.domain.member.MemberRepository;
+import hello.login.web.argumentresolver.Login;
 import hello.login.web.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,8 +90,21 @@ public class HomeController {
      * 얘는 세션을 찾고, 세션에 들어있는 데이터를 찾는 번거로운 과정을 스프링이 한번에 편리하게 처리해준다.
      * getSession과 파라미터는 동일하다. name, required
      */
-    @GetMapping("/")
+//    @GetMapping("/")
     public String homeLoginV3Spring(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, Model model){
+
+        // 로그인
+        if(loginMember == null){
+            return "home";
+        }
+
+        // 로그인에 성공햇다면 model에 담아서 html로 넘겨준다.
+        model.addAttribute("member",loginMember);
+        return "loginHome";
+    }
+
+    @GetMapping("/")
+    public String homeLoginV3ArgumentResolver(@Login Member loginMember, Model model){
 
         // 로그인
         if(loginMember == null){
